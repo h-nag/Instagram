@@ -22,8 +22,17 @@ class ViewController: UIViewController {
         super.viewWillAppear(animated)
         
         // Firebaseを初期化して認証情報を取得する
-        let firebaseRef = FIRDatabase.database().reference()
-        // テスト用
+        if let _ = FIRAuth.auth()?.currentUser {
+            // currentUserがnilでない場合は'setupTab'メソッドを呼び出してタブを表示させる
+            setupTab()
+        } else {
+            // ログインしていなければログインの画面を表示する
+            // viewWillAppear内でpresentViewControllerを呼び出しても表示されないためメソッドが終了してから呼ばれるようにする
+            dispatch_async(dispatch_get_main_queue()) {
+                let loginViewController = self.storyboard?.instantiateViewControllerWithIdentifier("Login")
+                self.presentViewController(loginViewController!, animated: true, completion: nil)
+            }
+        }
         
 
     }

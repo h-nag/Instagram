@@ -41,8 +41,8 @@ class LoginViewController: UIViewController {
                     SVProgressHUD.showErrorWithStatus("エラー")
                 } else {
                     // Firebaseからログインしたユーザの表示名を取得してNSUserDefaultsに保存する
-                    let user = self.firebaseAuth!.currentUser
-                    self.setDisplayName(user!.displayName!)
+                    let displayName = FIRAuth.auth()?.currentUser?.displayName
+                    self.setDisplayName(displayName!)
                 }
                 
                 // HUDを消す

@@ -16,8 +16,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        // Override point for customization after application launch.
+        
+        // Firebase初期化
         FIRApp.configure()
+        
+        // AdobeCreativeSDKのClient ID、Client Secretの設定
+        AdobeUXAuthManager.sharedManager().setAuthenticationParametersWithClientID("c03be7b6084a403b8c6b6ec5951d6618", withClientSecret: "e493524e-edfc-44db-b370-8ad2af0ddf12")
         
         return true
     }
