@@ -8,6 +8,7 @@ target 'Instagram' do
         pod 'Firebase'
 	pod 'Firebase/Database'
 	pod 'Firebase/Auth'
-	pod 'SVProgressHUD', :git => 'https://github.com/SVProgressHUD/SVProgressHUD.git'
+    # pod 'SVProgressHUD', :git => 'https://github.com/SVProgressHUD/SVProgressHUD.git'
+    pod 'MBProgressHUD', '~> 0.9.2'
 end
 

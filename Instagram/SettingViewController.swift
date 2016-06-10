@@ -10,7 +10,8 @@ import UIKit
 import ESTabBarController
 import Firebase
 import FirebaseAuth
-import SVProgressHUD
+// import SVProgressHUD
+import MBProgressHUD
 
 class SettingViewController: UIViewController {
 
@@ -23,18 +24,15 @@ class SettingViewController: UIViewController {
         if let name = displayNameTextField.text {
             // 表示名が入力されていない時はHUDを出して何もしない
             if name.characters.isEmpty {
-                SVProgressHUD.showErrorWithStatus("表示名を入力してください")
+                // SVProgressHUD.showErrorWithStatus("表示名を入力してください")
                 return
             }
             
-            let user = FIRAuth.auth()?.currentUser
-            
-            if let user = user {
-                let changeRequest = user.profileChangeRequest()
+            if let request = FIRAuth.auth()?.currentUser?.profileChangeRequest() {
                 
-                changeRequest.displayName = name
-                changeRequest.commitChangesWithCompletion{error in
-                    if let error = error {
+                request.displayName = name
+                request.commitChangesWithCompletion() {error in
+                    if error != nil {
                         // エラー表示
                         print("登録失敗")
                         print(error)
@@ -46,7 +44,10 @@ class SettingViewController: UIViewController {
                         ud.synchronize()
                         
                         // HUDで完了を知らせる
-                        SVProgressHUD.showSuccessWithStatus("表示名を変更しました")
+                        // SVProgressHUD.showSuccessWithStatus("表示名を変更しました")
+                        let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+                        hud.mode = MBProgressHUDMode.Text
+                        hud.labelText = "表示名を変更しました"
                         
                         // キーボードを閉じる
                         self.view.endEditing(true)
@@ -87,15 +88,5 @@ class SettingViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

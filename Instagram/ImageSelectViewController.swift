@@ -35,7 +35,7 @@ class ImageSelectViewController: UIViewController, UIImagePickerControllerDelega
         }
     }
     
-    
+    //  
     @IBAction func handleCancelButton(sender: UIButton) {
         // 画面を閉じる
         dismissViewControllerAnimated(true, completion: nil)

@@ -9,7 +9,8 @@
 import UIKit
 import Firebase
 import FirebaseDatabase
-import SVProgressHUD
+// import SVProgressHUD
+import MBProgressHUD
 
 class PostViewController: UIViewController {
     
@@ -37,7 +38,10 @@ class PostViewController: UIViewController {
         postRef.childByAutoId().setValue(postData)
         
         // HUDで投稿完了を表示する
-        SVProgressHUD.showSuccessWithStatus("投稿しました")
+        // SVProgressHUD.showSuccessWithStatus("投稿しました")
+        let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+        hud.mode = MBProgressHUDMode.Text
+        hud.labelText = "投稿しました"
         
         // 全てのモーダルを閉じる
         UIApplication.sharedApplication().keyWindow?.rootViewController?.dismissViewControllerAnimated(true, completion: nil)

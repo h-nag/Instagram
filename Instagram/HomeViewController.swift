@@ -33,38 +33,42 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         firedaseRef.child(CommonConst.PostPATH).observeEventType(.ChildAdded, withBlock: { snapshot in
             
             // PostDataクラスを生成して受け取ったデータを設定する
-            let postData = PostData(snapshot: snapshot, myId: (FIRAuth.auth()?.currentUser?.uid)!)
-            self.postArray.insert(postData, atIndex: 0)
+            if let uid = FIRAuth.auth()?.currentUser?.uid {
+                let postData = PostData(snapshot: snapshot, myId: uid)
+                self.postArray.insert(postData, atIndex: 0)
+            
             
             // TableViewを再表示する
             self.tableView.reloadData()
+            }
         })
         
         // 要素が変更されたら該当のデータをpostArrayから一度削除した後に新しいデータを追加してTableViewを再表示させる
         firedaseRef.child(CommonConst.PostPATH).observeEventType(.ChildChanged, withBlock: { snapshot in
             
             // PostDataクラスを生成して受け取ったデータを設定する
-            let postData = PostData(snapshot: snapshot, myId: (FIRAuth.auth()?.currentUser?.uid)!)
-            
-            // 保持している配列からidが同じものを探す
-            var index: Int = 0
-            for post in self.postArray {
-                if post.id == postData.id {
-                    index = self.postArray.indexOf(post)!
-                    break
+            if let uid = FIRAuth.auth()?.currentUser?.uid {
+                let postData = PostData(snapshot: snapshot, myId: uid)
+                
+                // 保持している配列からidが同じものを探す
+                var index: Int = 0
+                for post in self.postArray {
+                    if post.id == postData.id {
+                        index = self.postArray.indexOf(post)!
+                        break
+                    }
                 }
+                
+                // 差し替えるため一度削除する
+                self.postArray.removeAtIndex(index)
+                
+                // 削除した箇所に更新済みのデータを追加する
+                self.postArray.insert(postData, atIndex: index)
+                
+                // TableViewの該当セルだけを更新する
+                let indexPath = NSIndexPath(forRow: index, inSection: 0)
+                self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
             }
-            
-            // 差し替えるため一度削除する
-            self.postArray.removeAtIndex(index)
-            
-            // 削除した箇所に更新済みのデータを追加する
-            self.postArray.insert(postData, atIndex: index)
-            
-            // TableViewの該当セルだけを更新する
-            let indexPath = NSIndexPath(forRow: index, inSection: 0)
-            self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
-            
             
         })
     }
@@ -114,7 +118,7 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let postData = postArray[indexPath!.row]
         
         // Firebaseに保存するデータの準備
-        let uid = FIRAuth.auth()?.currentUser?.uid
+        if let uid = FIRAuth.auth()?.currentUser?.uid {
         
         if postData.isLiked {
             // すでにいいねをしていた場合はいいねを解除するためIDを取り除く
@@ -129,7 +133,7 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
             postData.likes.removeAtIndex(index)
         } else {
-            postData.likes.append(uid!)
+            postData.likes.append(uid)
         }
         
             let imageString = postData.imageString
@@ -142,6 +146,7 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
             let post = ["caption": caption!, "imageString": imageString!, "name": name!, "time": time, "likes": likes]
             let postRef = FIRDatabase.database().reference()
             postRef.child(CommonConst.PostPATH).child(postData.id!).setValue(post)
+        }
     }
 
 }

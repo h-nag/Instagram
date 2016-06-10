@@ -11,6 +11,7 @@
 
 #import <AdobeCreativeSDKCore/AdobeCreativeSDKCore.h>
 #import <AdobeCreativeSDKImage/AdobeCreativeSDKImage.h>
+#import <MBProgressHUD/MBProgressHUD.h>
 
 
 #endif /* Instagram_Bridging_Header_h */

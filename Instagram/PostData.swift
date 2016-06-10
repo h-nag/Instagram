@@ -24,13 +24,15 @@ class  PostData: NSObject {
     init(snapshot: FIRDataSnapshot, myId: String) {
         id = snapshot.key
         
-        imageString = snapshot.value?.objectForKey("image") as? String
+        let valueDictionary = snapshot.value as! [String: AnyObject]
+        
+        imageString = valueDictionary["image"] as? String
         image = UIImage(data: NSData(base64EncodedString: imageString!, options: .IgnoreUnknownCharacters)!)
         
-        name = snapshot.value?.objectForKey("name") as? String
+        name = valueDictionary["name"] as? String
         caption = snapshot.value?.objectForKey("caption") as? String
         
-        if let likes = snapshot.value?.objectForKey("likes") as? [String] {
+        if let likes = valueDictionary["likes"] as? [String] {
             self.likes = likes
         }
         
@@ -41,6 +43,6 @@ class  PostData: NSObject {
             }
         }
         
-        self.date = NSDate(timeIntervalSinceReferenceDate: snapshot.value?.objectForKey("time") as! NSTimeInterval)
+        self.date = NSDate(timeIntervalSinceReferenceDate: valueDictionary["time"] as! NSTimeInterval)
     }
 }

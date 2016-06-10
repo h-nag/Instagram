@@ -9,8 +9,6 @@
 import Foundation
 
 struct CommonConst {
-    static let FirebaseURL = ""
-    static let UsersPATH = "users"
     static let PostPATH = "posts"
     static let DisplayNameKey = "DISPLAYNAME"
 }

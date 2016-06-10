@@ -10,7 +10,8 @@ import UIKit
 import Firebase
 import FirebaseDatabase
 import FirebaseAuth
-import SVProgressHUD
+// import SVProgressHUD
+import MBProgressHUD
 
 class LoginViewController: UIViewController {
 
@@ -28,29 +29,38 @@ class LoginViewController: UIViewController {
             
             // アドレスとパスワード名のいずれかでも入力されていない時はHUDを出して何もしない
             if address.characters.isEmpty || password.characters.isEmpty {
-                SVProgressHUD.showErrorWithStatus("必要項目を入力してください。")
+                let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+                hud.mode = MBProgressHUDMode.Text
+                hud.labelText = "必要項目を入力してください。"
+               // SVProgressHUD.showErrorWithStatus("必要項目を入力してください。")
                 return
             }
             
             // 処理中を表示
-            SVProgressHUD.show()
+            // SVProgressHUD.show()
+            let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+            hud.mode = MBProgressHUDMode.Indeterminate
+            hud.show(true)
             
-            firebaseAuth.signInWithEmail(address, password: password, completion: {error, authData in
+            firebaseAuth.signInWithEmail(address, password: password) {user, error in
                 if error != nil {
                     // エラーを表示
-                    SVProgressHUD.showErrorWithStatus("エラー")
+                    print(error)
                 } else {
                     // Firebaseからログインしたユーザの表示名を取得してNSUserDefaultsに保存する
-                    let displayName = FIRAuth.auth()?.currentUser?.displayName
-                    self.setDisplayName(displayName!)
+                    if let displayName = user?.displayName {
+                        
+                        self.setDisplayName(displayName)
+                    }
                 }
                 
                 // HUDを消す
-                SVProgressHUD.dismiss()
+                // SVProgressHUD.dismiss()
+                hud.hide(true)
                 
                 // 画面を閉じる
                 self.dismissViewControllerAnimated(true, completion: nil)
-            })
+            }
         }
     }
     
@@ -63,38 +73,47 @@ class LoginViewController: UIViewController {
             // アドレスとパスワードと表示名のいずれかでも入力されていない時は何もしない
             if address.characters.isEmpty || password.characters.isEmpty
                 || displayName.characters.isEmpty{
-                 SVProgressHUD.showErrorWithStatus("必要項目を入力してください。")
+            
                 return
             }
             
             // 処理中を表示
-            SVProgressHUD.show()
+           // SVProgressHUD.show()
+            let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+            hud.mode = MBProgressHUDMode.Indeterminate
+            hud.show(true)
             
             firebaseAuth.createUserWithEmail(address, password: password, completion: {error, result in
                 if error != nil {
-                    
+                    print(error)
                 } else {
                     // ユーザを作成できたらそのままログインする
-                    self.firebaseAuth.signInWithEmail(address, password: password, completion: {error, authData in
+                    self.firebaseAuth.signInWithEmail(address, password: password) {user, error in
                         if error != nil {
-                        
+                            print(error)
                         } else {
                             // Firebaseに表示名を保存する
-                            let userRef = self.firebaseRef.child(CommonConst.UsersPATH)
-                            let data = ["name", displayName]
-                            userRef.setValue(data)
+                            let request = user?.profileChangeRequest()
+                            request?.displayName = displayName
+                            request?.commitChangesWithCompletion({ error in
+                                if error != nil {
+                                    print(error)
+                                } else {
+                                    // NSUserDefaultsに表示名を保存する
+                                    self.setDisplayName(displayName)
+                                    // 画面を閉じる
+                                    self.dismissViewControllerAnimated(true, completion: nil)
+                                }
+                            })
                             
-                            // NSUserDefaultsに表示名を保存する
-                            self.setDisplayName(displayName)
+
                             
                             // HUDを消す
-                            SVProgressHUD.dismiss()
-                            
-                            // 画面を閉じる
-                            self.dismissViewControllerAnimated(true, completion: nil)
+                           // SVProgressHUD.dismiss()
+                            hud.hide(true)
+
                         }
-                        
-                    })
+                    }
                 }
             })
         }
