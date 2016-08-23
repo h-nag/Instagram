@@ -68,7 +68,6 @@
 		71AC189E1CFFF9710043B333 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		71AC18A01CFFF9710043B333 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		71AC18A31CFFF9710043B333 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		71AC18A51CFFF9710043B333 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		71AC18AB1CFFFB2A0043B333 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		71AC18AD1CFFFBD30043B333 /* HomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		71AC18AF1CFFFC190043B333 /* ImageSelectViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageSelectViewController.swift; sourceTree = "<group>"; };
@@ -155,7 +154,6 @@
 				71AC189D1CFFF9710043B333 /* Main.storyboard */,
 				71AC18A01CFFF9710043B333 /* Assets.xcassets */,
 				71AC18A21CFFF9710043B333 /* LaunchScreen.storyboard */,
-				71AC18A51CFFF9710043B333 /* Info.plist */,
 				71AC18AB1CFFFB2A0043B333 /* LoginViewController.swift */,
 				71AC18AD1CFFFBD30043B333 /* HomeViewController.swift */,
 				71AC18AF1CFFFC190043B333 /* ImageSelectViewController.swift */,
@@ -482,6 +480,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = jp.techacademy.hidenori.nagasawa.Instagram;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Instagram/Instagram-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 			};
 			name = Debug;
 		};
