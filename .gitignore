@@ -1,3 +1,4 @@
 AdobeCreativeSDK*
 Pods/*
 *.xcworkspace
+*.plist
